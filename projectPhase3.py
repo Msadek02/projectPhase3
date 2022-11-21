@@ -53,12 +53,15 @@ def printinfo(DetailsPrinted):
         EmpFile = "Employees.txt"
         EmpDetail = open(EmpFile, "r")
         
+        
+        
         if not EmpDetail:
             break
         #write the line of code to remove the carriage return from the end of the record read from the file
         with open(EmpFile) as file:
             for line in file:
-                line = line.rstrip()
+                line = line.replace('\r', '').replace('\n', '')
+                print(line)
                 
 
 
@@ -66,8 +69,9 @@ def printinfo(DetailsPrinted):
         EmpList = []
         with open(EmpFile) as file:
             for line in file:
-                line = line.replace("|", "")
+                line = line.split('|')
                 EmpList.append(line)
+                print(EmpList)
         
 
         fromdate = EmpList[0]
@@ -126,13 +130,16 @@ if __name__ == "__main__":
         ##############################################################
         # write the line of code that will concatenate fromdate, todate, empname, hours, hourlyrate, and taxrate. Pipe delimit each value and add a carriage return to the end of the line
         # and assign the line to EmpDetail
-        EmpDetail = [fromdate, todate, empname, hours, hourlyrate, taxrate]
+        EmpDetail = [fromdate + "|" + todate + "|" + empname + "|" + str(hours) + "|" + str(hourlyrate) + "|" + str(taxrate) + " \n"]
         print(fromdate + "| " + todate + "| " + empname + "| " + f"{hours:,.2f}" + "| " + f"{hourlyrate:,.2f}" + "| " + f"{taxrate:,.1%}")
     
  
         # write the line of code that will write EmpDetail to EmpFile
-        EmpDetail = open("Employees.txt", "a")
-        EmpDetail.write(fromdate + "| " + todate + "| " + empname + "| " + f"{hours:,.2f}" + "| " + f"{hourlyrate:,.2f}" + "| " + f"{taxrate:,.1%}\n")
+        with open("Employees.txt", 'a') as fp:
+            for item in EmpDetail:
+                fp.write(item)
+                print("Line written: " ,item)
+        
         
     
     # write the line of code to close EmpFile
@@ -142,6 +149,5 @@ if __name__ == "__main__":
 
 
 ####################################################################
-
 
 
