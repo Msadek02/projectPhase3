@@ -35,8 +35,6 @@ def printinfo(DetailsPrinted):
 ###################################################################
     # write the line of code to open Employees.txt file in read mode and assign to EmpFile
     EmpFile = open("Employees.txt", "r") 
-
-
     while True:
         rundate = input ("Enter start date for report (MM/DD/YYYY) or All for all data in file: ")
         if (rundate.upper() == "ALL"):
@@ -50,30 +48,13 @@ def printinfo(DetailsPrinted):
             continue  # skip next if statement and re-start loop
     while True:
         # write the line of code to read a record from EmpFile and assign it to EmpDetail
-        EmpFile = "Employees.txt"
-        EmpDetail = open(EmpFile, "r")
-        
-        
-        
+        EmpDetail = EmpFile.readline()
         if not EmpDetail:
             break
         #write the line of code to remove the carriage return from the end of the record read from the file
-        with open(EmpFile) as file:
-            for line in file:
-                line = line.replace('\r', '').replace('\n', '')
-                print(line)
-                
-
-
+        EmpDetail = EmpDetail.replace("\n", "")       
         #write the line of code to split the record read in on the pipe delimiter and assign it to EmpList
-        EmpList = []
-        with open(EmpFile) as file:
-            for line in file:
-                line = line.split('|')
-                EmpList.append(line)
-                print(EmpList)
-        
-
+        EmpList = EmpDetail.split("|") 
         fromdate = EmpList[0]
         if (str(rundate).upper() != "ALL"):
             checkdate = datetime.strptime(fromdate, "%m/%d/%Y")
@@ -130,18 +111,9 @@ if __name__ == "__main__":
         ##############################################################
         # write the line of code that will concatenate fromdate, todate, empname, hours, hourlyrate, and taxrate. Pipe delimit each value and add a carriage return to the end of the line
         # and assign the line to EmpDetail
-        EmpDetail = [fromdate + "|" + todate + "|" + empname + "|" + str(hours) + "|" + str(hourlyrate) + "|" + str(taxrate) + " \n"]
-        print(fromdate + "| " + todate + "| " + empname + "| " + f"{hours:,.2f}" + "| " + f"{hourlyrate:,.2f}" + "| " + f"{taxrate:,.1%}")
-    
- 
+        EmpDetail = fromdate + "|" + todate + "|" + empname + "|" + str(hours) + "|" + str(hourlyrate) + "|" + str(taxrate) + "\n"
         # write the line of code that will write EmpDetail to EmpFile
-        with open("Employees.txt", 'a') as fp:
-            for item in EmpDetail:
-                fp.write(item)
-                print("Line written: " ,item)
-        
-        
-    
+        EmpFile.write(EmpDetail)
     # write the line of code to close EmpFile
     EmpFile.close()
     printinfo(DetailsPrinted)
